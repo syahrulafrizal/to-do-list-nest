@@ -14,13 +14,24 @@ datasource db {
 }
 
 model User {
-  id        String      @id @default(uuid())
-  fullName  String
+  id          String        @id @default(uuid())
+  fullName    String
+  email       String
+  password    String
+  createdAt   DateTime?     @default(now())
+  updatedAt   DateTime?     @updatedAt
+  status      UserStatus?   @default(ACTIVE)
+  UserSession UserSession[]
+}
+
+model UserSession {
+  id        String    @id @default(uuid())
+  userId    String
+  userAgent String
   email     String
-  password  String
-  createdAt DateTime?   @default(now())
-  updatedAt DateTime?   @updatedAt
-  status    UserStatus? @default(ACTIVE)
+  token     String
+  createdAt DateTime? @default(now())
+  user      User      @relation(fields: [userId], references: [id])
 }
 
 enum UserStatus {
